@@ -18,6 +18,7 @@ import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.data.simple.SimpleFeatureStore;
+import org.geotools.feature.FeatureCollections;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTSFactoryFinder;
@@ -45,6 +46,7 @@ public class CSV2SHP  {
 		 return;
 	 }
 	 List<SimpleFeature> features = new ArrayList<>();
+	 SimpleFeatureCollection collection = FeatureCollections.newCollection();
 	 
 	 SimpleFeatureType TYPE = DataUtilities.createType("Location", 
 				"location:Point:srid=4326," + "name:String," + "number;") ;
@@ -73,11 +75,16 @@ public class CSV2SHP  {
 				 featureBuilder.add(name);
 				 featureBuilder.add(number);
 				 SimpleFeature feature = featureBuilder.buildFeature(null);
+				 collection.add(feature);
 				 features.add(feature);
 						 
 			 }
 		 }
 	 }
+	 
+	 
+	 
+	
 	 
 	 
 	 

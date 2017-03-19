@@ -88,7 +88,6 @@
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-arcsde-common-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-charts-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-epsg-extension-2.7.0.jar"/>
-	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-epsg-postgresql-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-feature-pregeneralized-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-geotiff-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/Users/Beata-MacBook/Downloads/Materialy/geotools-2.7.0/gt-gtopo30-2.7.0.jar"/>
