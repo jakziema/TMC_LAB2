@@ -46,7 +46,7 @@ public class CSV2SHP  {
 		 return;
 	 }
 	 List<SimpleFeature> features = new ArrayList<>();
-	 SimpleFeatureCollection collection = FeatureCollections.newCollection();
+	 //SimpleFeatureCollection collection = FeatureCollections.newCollection();
 	 
 	 SimpleFeatureType TYPE = DataUtilities.createType("Location", 
 				"location:Point:srid=4326," + "name:String," + "number;") ;
@@ -61,6 +61,7 @@ public class CSV2SHP  {
 		 System.out.println("Header:" + line);
 		 
 		 for (line = reader.readLine(); line != null; line = reader.readLine()) {
+			 
 			 if(line.trim().length() > 0 ) {
 				 String tokens[] = line.split("\\,");
 				 
@@ -75,20 +76,74 @@ public class CSV2SHP  {
 				 featureBuilder.add(name);
 				 featureBuilder.add(number);
 				 SimpleFeature feature = featureBuilder.buildFeature(null);
-				 collection.add(feature);
+				 //collection.add(feature);
 				 features.add(feature);
 						 
 			 }
 		 }
 	 }
 	 
+	 File newFile = getNewShapeFile(file);
+	 ShapefileDataStoreFactory dataStoreFactory= new ShapefileDataStoreFactory();
+	 
+	 Map<String, Serializable> params = new HashMap<>();
+	 params.put("url", newFile.toURI().toURL());
+	 params.put("create spatial index", Boolean.TRUE);
+	 
+	 ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
+	 newDataStore.createSchema(TYPE);
+	 
+	 Transaction transaction  = new DefaultTransaction("create");
+	 
+	 String typeName = newDataStore.getTypeNames()[0];
+	 SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
+	 SimpleFeatureType SHAPE_TYPE = featureSource.getSchema();
+	 
+	 System.out.println("SHAPE: " + SHAPE_TYPE);
+	 
+	 if(featureSource instanceof SimpleFeatureStore) {
+		 SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
+		 SimpleFeatureCollection collection = new ListFeatureCollection(TYPE, features);
+		 featureStore.setTransaction(transaction);
+		 try {
+			 
+		 }catch(Exception exception) {
+			 exception.printStackTrace();
+			 transaction.rollback();
+		 }finally {
+			 transaction.close();
+		 }
+		 
+		 System.exit(0);
+	 } else {
+		 System.out.println(typeName + "does not support read/write access");
+		 System.exit(1);
+	 }
+	 
+ }
+ 
+ private static File getNewShapeFile(File csvFile) {
+	 String path = csvFile.getAbsolutePath();
+	 String newPath = path.substring(0, path.length() - 4) + ".shp";
+	 
+	 JFileDataStoreChooser chooser = new JFileDataStoreChooser("shp");
+	 chooser.setDialogTitle("Save shapefile");
+	 chooser.setSelectedFile(new File(newPath));
+	 
+	 int returnVal = chooser.showSaveDialog(null);
+	 
+	 if(returnVal != JFileDataStoreChooser.APPROVE_OPTION) {
+		 System.exit(0);
+	 }
+	 
+	 File newFile = chooser.getSelectedFile();
+	 if (newFile.equals(csvFile)) {
+		 System.out.println("Error: cannot replace " + csvFile );
+		 System.exit(0);
+	 }
 	 
 	 
-	
-	 
-	 
-	 
-	 
+	 return newFile;
 	 
  }
  
